@@ -6,4 +6,4 @@ What has been done so far:
 * Used the titanic dataset to model for the chances of survival as a function of age. Compared the results for MCMC with glm output. Same model resulted in both cases
 
 Next steps:
-# Simulate a simple hidden markov process to generate some data, then use this data to estimate the original HMM parameters
+* Simulate a simple hidden markov process to generate some data, then use this data to estimate the original HMM parameters
