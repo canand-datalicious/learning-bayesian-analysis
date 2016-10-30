@@ -6,6 +6,8 @@ titanic_survival <- read.csv("/Users/chaitanya/Documents/Projects/Titanic Surviv
 titanic_survival_modeling_dataset <- titanic_survival[,c("Age", "Survived")]
 titanic_survival_modeling_dataset <- titanic_survival_modeling_dataset[apply(titanic_survival_modeling_dataset, c(1), function(x){!any(is.na(x))}),]
 
+# titanic_survival_modeling_dataset$Survived <- ifelse(titanic_survival_modeling_dataset$Age <=45, 1, 0)
+
 # Models
 # ------------------------------------------------------------------------------------------------
 
@@ -25,15 +27,16 @@ mcmc_logistic <- function(d){
           y <- data.frame(data$d[,ncol(data$d)])
           
           # Prior probabilities
-          beta.prior <- dnorm(beta, 0, 1, log = TRUE)
+          beta.prior <- dnorm(beta, 0, 100, log = TRUE)
           
           # Posterior probabilities
-          logistic_pxi <-apply(x, c(1), function(x_i){beta[1] + (beta[2:length(beta)] * x_i)})
+          # logistic_pxi <-apply(x, c(1), function(x_i){beta[1] + (beta[2:length(beta)] * x_i)})
+          logistic_pxi <- beta[1] + (beta[2:length(beta)] * x)
           e_logistic_pxi <- exp(logistic_pxi)
           
           # df <- rbind(x, y, logistic_pxi, e_logistic_pxi)
           # LL <- apply(df, c(1), function(df_i){df$y * df$log})
-          LL <- sum(y*logistic_pxi) - sum(1 + e_logistic_pxi)
+          LL <- sum(y*logistic_pxi) - sum(log(1 + e_logistic_pxi))
           LP <- LL + sum(beta.prior)
           
           ret_list <- list(LP=LP, Dev=-2*LL, Monitor=LP, yhat=NA, parm=parm)
